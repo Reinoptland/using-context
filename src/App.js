@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect, createContext } from "react";
+import "./App.css";
+import Players from "./components/Players";
 
-function App() {
+// 1. Create a context
+export const playersContext = createContext();
+
+function Board() {
+  // console.log("WHAT IS playersCONTEXT?", playersContext);
+  const [players, setPlayers] = useState([]);
+
+  useEffect(() => {
+    async function getPlayers() {
+      const response = await fetch("http://localhost:4000/players");
+      const json = await response.json();
+      // console.log("PLAYERS", json);
+      setPlayers(json);
+    }
+    getPlayers();
+    return () => {
+      // cleanup / cancel
+    };
+  }, []);
+
+  // 2. Wrap your app in the Provider
+  // 3. Pass a value (or mutiple values)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <playersContext.Provider value={{ players: players, highscores: {} }}>
+      <div className="Board">
+        <Players />
+      </div>
+    </playersContext.Provider>
   );
 }
 
-export default App;
+export default Board;

@@ -1,0 +1,7 @@
+{
+  "players": [
+    { "id": 1, "name": "Alina", "score": 10 },
+    { "id": 2, "name": "Tahmina", "score": 8 },
+    { "id": 3, "name": "Rein", "score": 5 }
+  ]
+}
