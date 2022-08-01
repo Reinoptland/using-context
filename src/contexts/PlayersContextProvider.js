@@ -45,10 +45,42 @@ export default function PlayersContextProvider(props) {
     setPlayers(updatedPlayers);
   }
 
+  async function deletePlayer(id) {
+    console.log("WHICH PLAYER IS GONE??", id);
+
+    const response = await fetch(`http://localhost:4000/players/${id}`, {
+      method: "DELETE",
+    });
+    // console.log("SUCCES?", response.status);
+    // MAP [{}, {}, {}] -> [{}, {}, {}]
+    // FIND [{}, {}, {}] -> {} | undefined
+    // Filter [{}, {}, {}] -> [{}, {}]
+    // SPREAD [{}, {}, {}] + {} -> [{}, {}, {}, {}]
+
+    const updatedPlayers = players.filter((player) => {
+      console.log(
+        "FILTER: ID of player",
+        player.id,
+        "ID",
+        id,
+        player.id !== id
+      );
+      return player.id !== id;
+    });
+
+    console.log(updatedPlayers);
+    setPlayers(updatedPlayers);
+  }
+
   // 3. Pass a value (or mutiple values)
   return (
     <playersContext.Provider
-      value={{ players: players, highscores: {}, addPlayer: addPlayer }}
+      value={{
+        players: players,
+        highscores: {},
+        addPlayer: addPlayer,
+        deletePlayer: deletePlayer,
+      }}
     >
       {props.children}
     </playersContext.Provider>
